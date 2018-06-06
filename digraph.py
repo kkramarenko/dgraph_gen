@@ -12,7 +12,7 @@ def syndrome_gen(N, N_faulty):
     """
     
 #    print N
-    syndrome = np.empty((N, N))
+    syndrome = np.empty((N, N), dtype='int8')
 
     syndrome[:] = -1
 
@@ -48,7 +48,7 @@ def syndrome_gen(N, N_faulty):
                     else:
                         syndrome[idx1][idx2] = 0
 
-    faulty_nodes = np.zeros(N)
+    faulty_nodes = np.zeros(N, dtype='int8')
     for idx in range(N):
         if idx in faulty_set:
             faulty_nodes[idx] = 1
@@ -68,8 +68,8 @@ def trainset_gen(length, N, N_faulty):
         Training inputs and outputs.    
     """
 
-    Y = np.zeros(N)
-    X = np.zeros(N*N)
+    Y = np.zeros(N, dtype='int8')
+    X = np.zeros(N*N, dtype='int8')
 #    print Y.shape
 #    print X.shape
     while length > 0:

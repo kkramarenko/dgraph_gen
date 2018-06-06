@@ -13,15 +13,18 @@ from sklearn.metrics import label_ranking_average_precision_score
 #     [0, 1, 0, 1, 0]]
 
 #Y1 = [[1, 3], [2], [1]]
-N = 100
-N_faulty = 10
-trainset_length = 1000
-n_estim = 1000
+N = 75
+N_faulty = 3
+trainset_length = 11000
+n_estim = 100
 
 print "N: ", N
 print "N_faulty: ", N_faulty
 print "Length of trainset: ", trainset_length
 print "n_estimators: ", n_estim
+#print "max_depth: ", mx_dp
+
+np.random.seed(7)
 
 time_start = time()
 Y, X = trainset_gen(trainset_length, N, N_faulty)
@@ -34,8 +37,12 @@ X_test = X[train_len+1:]
 Y_train = Y[:train_len]
 Y_test = Y[train_len+1:]
 
+print type(X_train[0][0]) 
+
 time_start = time()
-model = RandomForestClassifier(n_estimators=n_estim)
+#max_features=N*10
+model = RandomForestClassifier(n_estimators=n_estim, #max_features=N/7,
+                               n_jobs=-1, bootstrap=True)
 model.fit(X_train, Y_train)
 time_end =  time()
 print "Time of learning: ", time_end - time_start, "seconds!"
