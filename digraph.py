@@ -1,4 +1,6 @@
 import numpy as np
+from time import time
+from multiprocessing.pool import ThreadPool
 
 def syndrome_gen(N, N_faulty):
     """Function for generating syndrome of system.
@@ -12,9 +14,11 @@ def syndrome_gen(N, N_faulty):
     """
     
 #    print N
-    syndrome = np.empty((N, N), dtype='int8')
-
-    syndrome[:] = -1
+#    syndrome = np.empty((N, N), dtype='int8')
+#    syndrome[:] = -1
+    vec = np.empty(N)
+    vec.fill(-1)
+    syndrome = np.diag(vec)
 
 #    tmp = np.reshape(syndrome, N*N)
 #    print syndrome
@@ -30,23 +34,32 @@ def syndrome_gen(N, N_faulty):
 #        print len(faulty_set)
 #        print tmp
     
+#    print faulty_set
     tmp = np.array(list(faulty_set)[:N_faulty]) - 1
     faulty_set = set(tmp)
 #    print faulty_set
 #    print faulty_nodes
 #    print len(faulty_nodes)
 
-#   Generate syndrome     
-    for idx1 in range(N):
+#   Generate syndrome
+    syndrome[:, tmp] = 1;
+    for idx1 in faulty_set:
         for idx2 in range(N):
-            if idx1 != idx2:
-                if idx1 in faulty_set:
-                    syndrome[idx1][idx2] = np.random.randint(low=0, high=2)
-                else:    
-                    if idx2 in faulty_set:
-                        syndrome[idx1][idx2] = 1
-                    else:
-                        syndrome[idx1][idx2] = 0
+            syndrome[idx1][idx2] = np.random.randint(low=0, high=2)
+        syndrome[idx1][idx1] = -1
+#    for idx1 in range(N):
+#        for idx2 in range(N):
+#            if idx1 != idx2:
+#                if idx1 in faulty_set:
+#                    syndrome[idx1][idx2] = np.random.randint(low=0, high=2)
+#                else:    
+#                    if idx2 in faulty_set:
+#                        syndrome[idx1][idx2] = 1
+#                    else:
+#                        syndrome[idx1][idx2] = 0
+    
+#    print "Time of syndrome: ", time() - time_start
+#    print syndrome
 
     faulty_nodes = np.zeros(N, dtype='int8')
     for idx in range(N):
@@ -80,5 +93,34 @@ def trainset_gen(length, N, N_faulty):
 
     return Y, X
 
-#trainset_gen(1, 5, 2)
+def parallel_gen(thread_num, length, N, N_faulty):
+    pool = ThreadPool(thread_num)
+    results = []
+   
+    time_start = time()
+    for thread_idx in range(0, thread_num):
+        results.append(pool.apply_async(trainset_gen,(int(length/thread_num), N, N_faulty)))
+
+    for res  in results:
+        tmp = res.get()
+        tmp_X = np.array(tmp[0])
+        tmp_Y = np.array(tmp[1])
+
+        print tmp_X.shape, tmp_Y.shape
+    
+    time_end = time()
+#    print "Gen time: ", time_end - time_start 
+    pool.close()
+    pool.join()
+
+#parallel_gen(8, 30000, 1000, 3)
+time_start = time()
+#trainset_gen(10000, 100, 3)
+parallel_gen(4, 30000, 1000, 3)
+#print "Time: ", time() - time_start
+file = open("rez.txt", "w")
+file.write("Time:")
+file.write(time_end - time_start)
+file.close()
+
 

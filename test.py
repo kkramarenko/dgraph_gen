@@ -13,9 +13,9 @@ from sklearn.metrics import label_ranking_average_precision_score
 #     [0, 1, 0, 1, 0]]
 
 #Y1 = [[1, 3], [2], [1]]
-N = 75
+N = 1000
 N_faulty = 3
-trainset_length = 11000
+trainset_length = 5000
 n_estim = 100
 
 print "N: ", N

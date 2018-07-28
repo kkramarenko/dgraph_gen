@@ -5,4 +5,4 @@
 #SBATCH --partition=release
 
 cd $SLURM_SUBMIT_DIR
-python test.py
+python digraph.py
