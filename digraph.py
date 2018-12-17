@@ -107,20 +107,20 @@ def parallel_gen(thread_num, length, N, N_faulty):
         tmp_Y = np.array(tmp[1])
 
         print tmp_X.shape, tmp_Y.shape
-    
+            
     time_end = time()
 #    print "Gen time: ", time_end - time_start 
     pool.close()
     pool.join()
 
 #parallel_gen(8, 30000, 1000, 3)
-time_start = time()
+#time_start = time()
 #trainset_gen(10000, 100, 3)
-parallel_gen(4, 30000, 1000, 3)
+#parallel_gen(4, 10000, 1000, 3)
 #print "Time: ", time() - time_start
-file = open("rez.txt", "w")
-file.write("Time:")
-file.write(time_end - time_start)
-file.close()
+#file = open("rez.txt", "w")
+#file.write("Time:")
+#file.write(time() - time_start)
+#file.close()
 
 
