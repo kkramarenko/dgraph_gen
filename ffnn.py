@@ -15,7 +15,7 @@ from sklearn.metrics import label_ranking_average_precision_score
 
 #Y1 = [[1, 3], [2], [1]]
 N = 50
-N_faulty = 25
+N_faulty = 5
 trainset_length = 1000
 #n_estim = 100
 
@@ -46,7 +46,7 @@ model = Sequential()
 model.add(Dense(N*3, input_dim=N*N, activation='relu'))
 model.add(Dense(N*3, activation='relu'))
 model.add(Dense(N, activation='relu'))
-model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='mse', optimizer='nadam', metrics=['accuracy'])
 
 model.fit(X_train, Y_train, epochs=15, batch_size=100)
 time_end =  time()

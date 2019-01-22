@@ -82,7 +82,10 @@ def trainset_gen(length, N, N_faulty):
     """
 
     Y = np.zeros(N, dtype='int8')
-    X = np.zeros(N*N, dtype='int8')
+    X = np.empty(N, dtype='int8')
+    X.fill(-1)
+    X = np.diag(X)
+    X = X.reshape(-1,)
 #    print Y.shape
 #    print X.shape
     while length > 0:
