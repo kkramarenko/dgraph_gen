@@ -88,6 +88,7 @@ def trainset_gen(length, N, N_faulty):
     X = X.reshape(-1,)
 #    print Y.shape
 #    print X.shape
+    length -= 1
     while length > 0:
         tmp_Y, tmp_X = syndrome_gen(N, N_faulty)
         Y = np.vstack([Y, tmp_Y])
